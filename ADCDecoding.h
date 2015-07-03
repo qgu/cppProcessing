@@ -9,7 +9,7 @@
 #define ADCDECODING_H_
 
 #include"matStruct.h"
-Mat<int> ADCDecoding(Mat<int>, Mat<int>);
+void ADCDecoding(const Mat<int> &, Mat<int> &);
 
 
 

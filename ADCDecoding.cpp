@@ -7,11 +7,11 @@
 
 #include"ADCDecoding.h"
 
-Mat<int> ADCDecoding(const Mat<int> src, Mat<int> des){
+void ADCDecoding(const Mat<int> & src, Mat<int> &des){
 	//initialize destination matrix
-	/*
-		des.width = src.width;
-		des.height = src.height;
-	*/
-	return des;
+
+	des.width = src.width;
+	des.height = src.height;
+
+
 }
