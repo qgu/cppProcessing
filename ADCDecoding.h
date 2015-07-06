@@ -10,9 +10,10 @@
 
 #include"matStruct.h"
 #include<iostream>
+#include<exception>
 
 void ADCDecoding(const Mat<int> &, Mat<int> &);
-
+class dimension_mismatch_exception: public std::exception{};
 
 
 #endif /* ADCDECODING_H_ */

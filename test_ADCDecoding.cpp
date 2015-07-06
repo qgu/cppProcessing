@@ -22,7 +22,6 @@ using namespace std;
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
-/*
 struct fixturePoint{
 		Mat<int> testMat;
 		Mat<int> desMat;
@@ -33,8 +32,8 @@ struct fixturePoint{
 					int* testImage = new int[testMat.width * testMat.height];
 					testMat.data = testImage;
 
-					desMat.width = 1;//= testMat.width;
-					desMat.height = 1; //= testMat.height;
+					desMat.height = 1;//= testMat.width;
+					desMat.width = 1; //= testMat.height;
 					int* desImage = new int[desMat.width * desMat.height];
 					desMat.data = desImage;
 
@@ -47,37 +46,52 @@ struct fixturePoint{
 			delete [] desMat.data;
 		}
 };
-*/
-/*
-struct fixturePoint{
-	Mat<int> testMat;
-	Mat<int> desMat;
-	fixturePoint(){
-		//initialize data array.
-			testMat.setMat(1,1);
-			desMat.setMat(1,1);
 
-		//run the function
-			ADCDecoding(testMat, desMat);
-	}
-	~fixturePoint(){
-		delete [] testMat.data;
-		delete [] desMat.data;
-	}
-};
-*/
 struct fixtureSmall{
 	Mat<int> testMat;
 	Mat<int> desMat;
 	fixtureSmall(){
 		//initialize data array.
-			testMat.setMat(3,4);
-			desMat.setMat(3,4);
+			testMat.height = 3;
+			testMat.width = 4;
+			int* testImage = new int[testMat.width * testMat.height];
+			testMat.data = testImage;
+
+			desMat.height = 3;//= testMat.width;
+			desMat.width = 4; //= testMat.height;
+			int* desImage = new int[desMat.width * desMat.height];
+			desMat.data = desImage;
 
 		//run the function
 			ADCDecoding(testMat, desMat);
 	}
+
 	~fixtureSmall(){
+		delete [] testMat.data;
+		delete [] desMat.data;
+	}
+};
+
+struct fixtureBig{
+	Mat<int> testMat;
+	Mat<int> desMat;
+	fixtureBig(){
+		//initialize data array.
+			testMat.height = 1024;
+			testMat.width = 1024;
+			int* testImage = new int[testMat.width * testMat.height];
+			testMat.data = testImage;
+
+			desMat.height = 1024;//= testMat.width;
+			desMat.width = 1024; //= testMat.height;
+			int* desImage = new int[desMat.width * desMat.height];
+			desMat.data = desImage;
+
+		//run the function
+			ADCDecoding(testMat, desMat);
+	}
+
+	~fixtureBig(){
 		delete [] testMat.data;
 		delete [] desMat.data;
 	}
@@ -88,45 +102,15 @@ int helper(int coarse, int fine, int gain){
 	return output;
 }
 
-/*
-struct fixtureBig{
-		Mat<int> testMat;
-		Mat<int> desMat;
-		fixtureSmall(){
-			int* testImage = new int{1,2,3,4,5,6};
-			testMat.data = testImage;
-			testMat.height = 3;
-			testMat.width = 4;
-
-			desMat.width = testMat.width;
-			desMat.height = testMat.height;
-			int* desImage = new int[desMat.width * desMat.height];
-			desMat.data = desImage;
-		}
-		~fixtureSmall(){
-			delete [] testMat.data;
-			delete [] desMat.data;
-		}
-};
-*/
-
-
 BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_small_image,fixtureSmall) // name of the test suite is stringtest
 
 	//small images 3 * 4
-/*
-	BOOST_AUTO_TEST_CASE ( should_throw_exception_if_width_and_height_are_not_the_same_as_input	)
+
+	BOOST_AUTO_TEST_CASE (should_throw_exception_if_width_and_height_are_not_the_same_as_input	)
 	{
-		BOOST_REQUIRE_THROW(,20);
+		if((testMat.width != desMat.width) || (testMat.height != desMat.height))
+			BOOST_REQUIRE_THROW(ADCDecoding(testMat,desMat),dimension_mismatch_exception);
 	}
-*/
-/*
-	BOOST_AUTO_TEST_CASE (returning_mat_of_same_height_and_width)
-	{
-		BOOST_REQUIRE_EQUAL(testMat.width,desMat.width);
-		BOOST_REQUIRE_EQUAL(testMat.height,desMat.height);
-	}
-*/
 
 	BOOST_AUTO_TEST_CASE (output_pixel_is_of_right_type)
 	{
@@ -154,7 +138,6 @@ BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_small_image,fixtureSmall) // name of 
 	}
 BOOST_AUTO_TEST_SUITE_END()
 
-/*
 BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_point_image, fixturePoint)
 	//testing the algorithm for different boundary cases
 	BOOST_AUTO_TEST_CASE ( should_return_B_when_input_is_A )
@@ -168,7 +151,7 @@ BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_point_image, fixturePoint)
 		 *  32767		0111,1111,1111,1111		31			255		3		1137
 		 *  21853		0101,0101,0101,1101		21			87		1		171
 		 */
-/*		*(testMat.data) = 0;
+		*(testMat.data) = 0;
 		ADCDecoding(testMat, desMat);
 		BOOST_CHECK_EQUAL(helper(0,0,0), *(desMat.data));
 
@@ -183,7 +166,20 @@ BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_point_image, fixturePoint)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-*/
+BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding_big_image, fixtureBig)
+
+BOOST_AUTO_TEST_CASE(should_return_sensible_answer_for_different_locations_in_the_image)
+{
+	for(int i = 0; i < testMat.width * testMat.height; i += 21)
+		*(testMat.data + i) = 21853;
+
+	ADCDecoding(testMat,desMat);
+
+	for(int i = 0; i < testMat.width * testMat.height; i += 21)
+		BOOST_REQUIRE_EQUAL(*(desMat.data + i), 171);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
 
 
 
