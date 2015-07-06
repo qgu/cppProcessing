@@ -4,7 +4,7 @@
  *  Created on: 3 Jul 2015
  *      Author: pqm78245
  */
-
+/*
 #include"matStruct.h"
 #include"ADCDecoding.h"
 
@@ -66,5 +66,5 @@ BOOST_FIXTURE_TEST_SUITE (test_ADCDecoding,fixture) // name of the test suite is
 BOOST_AUTO_TEST_SUITE_END()
 
 
-
+*/
 

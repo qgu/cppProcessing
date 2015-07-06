@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../ADCDecoding.cpp \
+../test_ADCDecoding.cpp \
 ../testing.cpp 
 
 OBJS += \
 ./ADCDecoding.o \
+./test_ADCDecoding.o \
 ./testing.o 
 
 CPP_DEPS += \
 ./ADCDecoding.d \
+./test_ADCDecoding.d \
 ./testing.d 
 
 
