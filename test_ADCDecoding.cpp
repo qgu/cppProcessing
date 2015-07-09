@@ -16,7 +16,6 @@
 #include"ADCDecoding.h"
 
 #include<iostream>
-#include<string>
 using namespace std;
 
 
@@ -75,7 +74,7 @@ BOOST_AUTO_TEST_CASE (should_throw_exception_if_width_and_height_are_not_the_sam
 		BOOST_REQUIRE_THROW(ADCDecoding(testMat,desMat),dimension_mismatch_exception);
 }
 
-BOOST_AUTO_TEST_CASE (output_pixel_is_of_right_type)
+BOOST_AUTO_TEST_CASE (output_pixel_should_be_int_when_input_is_int)
 {
 	BOOST_CHECK_EQUAL(sizeof(*(testMat.data)),sizeof(*(desMat.data)));
 }
